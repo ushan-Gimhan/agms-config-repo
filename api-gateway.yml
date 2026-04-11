@@ -7,17 +7,18 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 
-      # ================= ROUTES =================
       routes:
 
-        # ---------- AUTH SERVICE ----------
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/api/auth/**
 
-        # ---------- ZONE SERVICE ----------
         - id: zone-service
           uri: lb://ZONE-SERVICE
           predicates:
@@ -25,7 +26,6 @@ spring:
           filters:
             - name: Authentication
 
-        # ---------- SENSOR SERVICE ----------
         - id: sensor-service
           uri: lb://SENSOR-SERVICE
           predicates:
@@ -33,7 +33,6 @@ spring:
           filters:
             - name: Authentication
 
-        # ---------- CROP SERVICE ----------
         - id: crop-service
           uri: lb://CROP-INVENTORY-SERVICE
           predicates:
@@ -41,40 +40,20 @@ spring:
           filters:
             - name: Authentication
 
-      # Enable service discovery routing (optional but powerful)
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-
-# ================= EUREKA =================
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
 
-  instance:
-    prefer-ip-address: true
-
-# ================= JWT CONFIG =================
 jwt:
-  secret: "CHANGE_THIS_TO_ENV_SECRET_KEY"
+  secret: s1yrp6ObnCom75pEyGg4gKJrdV8ViStJVI532bUreW1
 
-# ================= ACTUATOR =================
 management:
   endpoints:
     web:
       exposure:
         include: health, info, gateway
 
-  endpoint:
-    gateway:
-      enabled: true
-
-# ================= LOGGING =================
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    reactor.netty: INFO
